@@ -731,6 +731,7 @@ const STRINGS = {
     empty:"Tap a number above to see what it means 💜",
     footer_date:"Crisis lines last checked on April 4th, 2026",
     footer_report:'Report incorrect or missing numbers on <a href="https://github.com/amunozj/saftey-scale/issues" target="_blank" style="color:var(--accent);">GitHub</a>',
+    footer_guide:'Parents &amp; providers: <a href="https://github.com/amunozj/saftey-scale#for-parents-and-providers-how-to-use-this-with-your-child-or-patient" target="_blank" style="color:var(--accent);">how to use this app together</a>',
   },
   es: {
     tab_scale:"Escala", tab_look:"Aspecto", tab_lang:"Idioma", tab_crisis:"Líneas de Ayuda",
@@ -747,6 +748,7 @@ const STRINGS = {
     empty:"Toca un número arriba para ver qué significa 💜",
     footer_date:"Líneas de ayuda revisadas el 4 de abril de 2026",
     footer_report:'Reporta números incorrectos o faltantes en <a href="https://github.com/amunozj/saftey-scale/issues" target="_blank" style="color:var(--accent);">GitHub</a>',
+    footer_guide:'Padres y proveedores: <a href="https://github.com/amunozj/saftey-scale#para-padres-y-proveedores-c%C3%B3mo-usar-esto-con-su-hijo-o-paciente" target="_blank" style="color:var(--accent);">cómo usar esta aplicación juntos</a>',
   }
 };
 
@@ -1044,7 +1046,7 @@ function applyLang() {
     el.textContent = t(key);
   });
   // Footer blocks use innerHTML (contain links)
-  const footerHTML = `${t('footer_date')}<br>${t('footer_report')}`;
+  const footerHTML = `${t('footer_guide')}<br>${t('footer_date')}<br>${t('footer_report')}`;
   document.querySelectorAll(".footer-block").forEach(el => { el.innerHTML = footerHTML; });
   // Update modal buttons
   document.querySelector(".btn-save").textContent = t("modal_save");
