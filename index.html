@@ -476,6 +476,32 @@ body {
   border: 1px solid var(--border-subtle); border-radius: 12px;
   color: var(--text-secondary); font-family: var(--font-body); font-size: 22px; cursor: pointer;
 }
+/* ── INSTALL BANNER ──────────────────────────────────── */
+.install-banner {
+  display: none;
+  position: fixed;
+  bottom: 0; left: 0; right: 0;
+  background: linear-gradient(135deg, #1e1b4b, #302b63);
+  border-top: 1px solid var(--accent);
+  padding: 14px 16px;
+  z-index: 200;
+  align-items: center;
+  gap: 12px;
+  box-shadow: 0 -4px 20px rgba(0,0,0,0.4);
+}
+.install-banner.visible { display: flex; }
+.install-banner-text { flex: 1; font-size: 14px; color: var(--text-primary); line-height: 1.4; }
+.install-banner-text strong { color: var(--accent); }
+.install-btn {
+  padding: 10px 16px; background: var(--accent); color: #fff;
+  border: none; border-radius: 10px; font-family: var(--font-body);
+  font-size: 14px; font-weight: 700; cursor: pointer; white-space: nowrap;
+  flex-shrink: 0;
+}
+.install-dismiss {
+  background: none; border: none; color: var(--text-muted);
+  font-size: 20px; cursor: pointer; padding: 0 2px; flex-shrink: 0;
+}
 </style>
 </head>
 <body>
@@ -1277,6 +1303,83 @@ if ('serviceWorker' in navigator) {
   navigator.serviceWorker.register('sw.js').catch(() => {});
 }
 </script>
+
+<script>
+// ══ INSTALL PROMPT ═════════════════════════════════════════
+let _installPrompt = null;
+
+window.addEventListener('beforeinstallprompt', e => {
+  e.preventDefault();
+  _installPrompt = e;
+  // Only show if not previously dismissed
+  if (!localStorage.getItem('installDismissed')) {
+    showInstallBanner();
+  }
+});
+
+// Hide banner if already installed
+window.addEventListener('appinstalled', () => {
+  hideInstallBanner();
+  localStorage.setItem('installDismissed', '1');
+});
+
+function showInstallBanner() {
+  const banner = document.getElementById('installBanner');
+  if (banner) banner.classList.add('visible');
+  updateInstallBannerText();
+}
+
+function hideInstallBanner() {
+  const banner = document.getElementById('installBanner');
+  if (banner) banner.classList.remove('visible');
+}
+
+function dismissInstall() {
+  hideInstallBanner();
+  localStorage.setItem('installDismissed', '1');
+}
+
+function updateInstallBannerText() {
+  const el = document.getElementById('installBannerText');
+  const btn = document.getElementById('installBtn');
+  if (!el || !btn) return;
+  const isEs = state && state.currentLang === 'es';
+  if (isEs) {
+    el.innerHTML = '<strong>Agregar a pantalla de inicio</strong><br>Instala para la mejor experiencia — funciona sin internet.';
+    btn.textContent = 'Instalar';
+  } else {
+    el.innerHTML = '<strong>Add to Home Screen</strong><br>Install for the best experience — works offline, opens instantly.';
+    btn.textContent = 'Install';
+  }
+}
+
+document.getElementById('installBtn').addEventListener('click', async () => {
+  if (!_installPrompt) return;
+  _installPrompt.prompt();
+  const { outcome } = await _installPrompt.userChoice;
+  _installPrompt = null;
+  if (outcome === 'accepted') {
+    hideInstallBanner();
+    localStorage.setItem('installDismissed', '1');
+  }
+});
+
+// Re-translate banner when language changes
+const _origApplyLang = applyLang;
+applyLang = function() {
+  _origApplyLang();
+  updateInstallBannerText();
+};
+</script>
+
+<!-- ══ INSTALL BANNER ═════════════════════════════════════ -->
+<div class="install-banner" id="installBanner">
+  <div class="install-banner-text" id="installBannerText">
+    <strong>Add to Home Screen</strong><br>Install for the best experience — works offline, opens instantly.
+  </div>
+  <button class="install-btn" id="installBtn">Install</button>
+  <button class="install-dismiss" onclick="dismissInstall()" aria-label="Dismiss">×</button>
+</div>
 
 </body>
 </html>
