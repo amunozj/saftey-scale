@@ -6,11 +6,11 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="apple-mobile-web-app-title" content="Saefty Plan">
-<meta name="application-name" content="Saefty Plan">
+<meta name="apple-mobile-web-app-title" content="Saftey Plan">
+<meta name="application-name" content="Saftey Plan">
 <meta name="theme-color" content="#0f0c29">
 <link rel="manifest" href="manifest.json">
-<title>Saefty Plan 💜</title>
+<title>Saftey Plan 💜</title>
 <style>
 /* Nunito 300 - 15.7KB */
 @font-face {
@@ -476,6 +476,16 @@ body {
   border: 1px solid var(--border-subtle); border-radius: 12px;
   color: var(--text-secondary); font-family: var(--font-body); font-size: 22px; cursor: pointer;
 }
+/* ── DATA EXPORT/IMPORT ──────────────────────────────── */
+.data-btn {
+  display: flex; align-items: center; gap: 8px;
+  padding: 12px 18px; background: var(--bg-card);
+  border: 1px solid var(--border-subtle); border-radius: 14px;
+  color: var(--text-primary); font-family: var(--font-body);
+  font-size: 16px; font-weight: 600; cursor: pointer;
+  transition: border-color 0.2s, background 0.2s;
+}
+.data-btn:active { background: rgba(255,255,255,0.14); border-color: var(--accent); }
 /* ── INSTALL BANNER ──────────────────────────────────── */
 .install-banner {
   display: none;
@@ -553,6 +563,22 @@ body {
   <div class="app-header">
     <div class="app-title" data-t="look_title">Make It Yours ✨</div>
     <div class="app-subtitle" data-t="look_subtitle">change how it looks and feels</div>
+  </div>
+  <div class="settings-section">
+    <div class="settings-section-title" data-t="data_title">My Descriptions</div>
+    <div style="font-size:13px;color:var(--text-muted);margin-bottom:12px;" data-t="data_subtitle">Export your edits to a file, or import from a previous backup.</div>
+    <div style="display:flex;gap:10px;flex-wrap:wrap;">
+      <button class="data-btn" onclick="exportDescriptions()">
+        <span style="font-size:18px;">💾</span>
+        <span data-t="data_export">Export</span>
+      </button>
+      <button class="data-btn" onclick="document.getElementById('importFileInput').click()">
+        <span style="font-size:18px;">📂</span>
+        <span data-t="data_import">Import</span>
+      </button>
+      <input type="file" id="importFileInput" accept=".json" style="display:none" onchange="importDescriptions(event)">
+    </div>
+    <div id="dataFeedback" style="margin-top:10px;font-size:13px;min-height:18px;"></div>
   </div>
   <div class="settings-section">
     <div class="settings-section-title" data-t="look_font">Font</div>
@@ -719,11 +745,11 @@ let state = {
 };
 
 function saveState() {
-  try { localStorage.setItem("saeftyplan_v2", JSON.stringify(state)); } catch(e){}
+  try { localStorage.setItem("safteyplan_v2", JSON.stringify(state)); } catch(e){}
 }
 function loadState() {
   try {
-    const s = localStorage.getItem("saeftyplan_v2");
+    const s = localStorage.getItem("safteyplan_v2");
     if (s) Object.assign(state, JSON.parse(s));
   } catch(e){}
 }
@@ -743,11 +769,17 @@ function getLevel(n) {
 // ══ STRINGS (i18n) ═════════════════════════════════════════
 const STRINGS = {
   en: {
-    tab_scale:"Scale", tab_look:"Look", tab_lang:"Language", tab_crisis:"Crisis Lines",
+    tab_scale:"Scale", tab_look:"My Choices", tab_lang:"Language", tab_crisis:"Crisis Lines",
     app_title:"Saftey Scale 💜", app_subtitle:"how are you feeling right now?",
     pill_6:"⚠️ 6 = tell someone now", pill_910:"🆘 9–10 = emergency",
     look_title:"Make It Yours ✨", look_subtitle:"change how it looks and feels",
     look_font:"Font", look_theme:"Color Theme",
+    data_title:"My Descriptions", data_subtitle:"Export your edits to a file, or import from a previous backup.",
+    data_export:"Export", data_import:"Import",
+    data_export_none:"Nothing to export — no custom descriptions yet.",
+    data_import_ok:"✓ Descriptions imported successfully.",
+    data_import_err:"✗ Couldn't read that file. Make sure it's a Saftey Scale export.",
+    data_import_confirm:"This will replace your current custom descriptions. Import anyway?",
     lang_subtitle:"choose your language",
     crisis_title:"Crisis Lines 🆘", crisis_subtitle:"tap any number to call",
     field_feels:"What this feels like", field_body:"Body",
@@ -760,11 +792,17 @@ const STRINGS = {
     footer_guide:'Parents &amp; providers: <a href="https://github.com/amunozj/saftey-scale#for-parents-and-providers-how-to-use-this-with-your-child-or-patient" target="_blank" style="color:var(--accent);">how to use this app together</a>',
   },
   es: {
-    tab_scale:"Escala", tab_look:"Aspecto", tab_lang:"Idioma", tab_crisis:"Líneas de Ayuda",
+    tab_scale:"Escala", tab_look:"Preferencias", tab_lang:"Idioma", tab_crisis:"Líneas de Ayuda",
     app_title:"Escala Saftey 💜", app_subtitle:"¿cómo te sientes ahora mismo?",
     pill_6:"⚠️ 6 = díselo a alguien ya", pill_910:"🆘 9–10 = emergencia",
     look_title:"Hazlo tuyo ✨", look_subtitle:"cambia cómo se ve y se siente",
     look_font:"Fuente", look_theme:"Color",
+    data_title:"Mis Descripciones", data_subtitle:"Exporta tus ediciones a un archivo, o importa desde una copia anterior.",
+    data_export:"Exportar", data_import:"Importar",
+    data_export_none:"Nada que exportar — aún no hay descripciones personalizadas.",
+    data_import_ok:"✓ Descripciones importadas correctamente.",
+    data_import_err:"✗ No se pudo leer el archivo. Asegúrate de que sea una exportación de Saftey Scale.",
+    data_import_confirm:"Esto reemplazará tus descripciones personalizadas actuales. ¿Importar de todos modos?",
     lang_subtitle:"elige tu idioma",
     crisis_title:"Líneas de Ayuda 🆘", crisis_subtitle:"toca cualquier número para llamar",
     field_feels:"Cómo se siente esto", field_body:"Cuerpo",
@@ -1282,10 +1320,74 @@ document.getElementById("editModal").addEventListener("click", function(e){
   if (e.target === this) closeModal();
 });
 
+// ══ EXPORT / IMPORT ════════════════════════════════════════
+function exportDescriptions() {
+  const feedback = document.getElementById("dataFeedback");
+  const hasOverrides = Object.keys(state.levelOverrides).length > 0;
+  if (!hasOverrides) {
+    feedback.style.color = "var(--text-muted)";
+    feedback.textContent = t("data_export_none");
+    setTimeout(() => { feedback.textContent = ""; }, 3000);
+    return;
+  }
+  const payload = {
+    version: 1,
+    app: "saftey-scale",
+    exported: new Date().toISOString().slice(0, 10),
+    lang: state.currentLang,
+    font: state.currentFont,
+    theme: state.currentTheme,
+    levelOverrides: state.levelOverrides
+  };
+  const blob = new Blob([JSON.stringify(payload, null, 2)], { type: "application/json" });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = `saftey-descriptions-${payload.exported}.json`;
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+  feedback.style.color = "var(--accent)";
+  feedback.textContent = "✓ Saved!";
+  setTimeout(() => { feedback.textContent = ""; }, 3000);
+}
+
+function importDescriptions(event) {
+  const file = event.target.files[0];
+  // Reset the input so the same file can be picked again if needed
+  event.target.value = "";
+  if (!file) return;
+  const feedback = document.getElementById("dataFeedback");
+  const reader = new FileReader();
+  reader.onload = function(e) {
+    try {
+      const payload = JSON.parse(e.target.result);
+      if (payload.app !== "saftey-scale" || !payload.levelOverrides) throw new Error("wrong format");
+      const hasExisting = Object.keys(state.levelOverrides).length > 0;
+      const proceed = !hasExisting || confirm(t("data_import_confirm"));
+      if (!proceed) { feedback.textContent = ""; return; }
+      state.levelOverrides = payload.levelOverrides;
+      if (payload.font)  { state.currentFont  = payload.font;  applyFont(payload.font);   }
+      if (payload.theme) { state.currentTheme = payload.theme; applyTheme(payload.theme); }
+      saveState();
+      renderLevelDetail();
+      feedback.style.color = "var(--accent)";
+      feedback.textContent = t("data_import_ok");
+      setTimeout(() => { feedback.textContent = ""; }, 4000);
+    } catch(_) {
+      feedback.style.color = "#f87171";
+      feedback.textContent = t("data_import_err");
+      setTimeout(() => { feedback.textContent = ""; }, 4000);
+    }
+  };
+  reader.readAsText(file);
+}
+
 // ══ INIT ═══════════════════════════════════════════════════
 loadState();
 // Auto-detect device language on first visit (no saved preference yet)
-if (!localStorage.getItem("saeftyplan_v2")) {
+if (!localStorage.getItem("safteyplan_v2")) {
   const deviceLang = (navigator.language || navigator.userLanguage || "en").slice(0,2).toLowerCase();
   state.currentLang = deviceLang === "es" ? "es" : "en";
 }
@@ -1303,6 +1405,15 @@ if ('serviceWorker' in navigator) {
   navigator.serviceWorker.register('sw.js').catch(() => {});
 }
 </script>
+
+<!-- ══ INSTALL BANNER ═════════════════════════════════════ -->
+<div class="install-banner" id="installBanner">
+  <div class="install-banner-text" id="installBannerText">
+    <strong>Add to Home Screen</strong><br>Install for the best experience — works offline, opens instantly.
+  </div>
+  <button class="install-btn" id="installBtn">Install</button>
+  <button class="install-dismiss" onclick="dismissInstall()" aria-label="Dismiss">×</button>
+</div>
 
 <script>
 // ══ INSTALL PROMPT ═════════════════════════════════════════
@@ -1371,15 +1482,6 @@ applyLang = function() {
   updateInstallBannerText();
 };
 </script>
-
-<!-- ══ INSTALL BANNER ═════════════════════════════════════ -->
-<div class="install-banner" id="installBanner">
-  <div class="install-banner-text" id="installBannerText">
-    <strong>Add to Home Screen</strong><br>Install for the best experience — works offline, opens instantly.
-  </div>
-  <button class="install-btn" id="installBtn">Install</button>
-  <button class="install-dismiss" onclick="dismissInstall()" aria-label="Dismiss">×</button>
-</div>
 
 </body>
 </html>

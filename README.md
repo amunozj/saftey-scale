@@ -63,7 +63,18 @@ The app lets the user edit every field — descriptions, body sensations, though
 
 To edit: tap any level number, then tap the ✏️ edit button next to any field.
 
-### Step 5 — Pin the right crisis line
+### Step 5 — Back up and transfer edited descriptions
+
+Once the user has edited the level descriptions to match their own experience, those edits exist only in their phone's local storage. Backing them up protects against losing them if they reinstall the app, clear their browser data, or switches devices.
+
+Go to the **My Choices** tab → **My Descriptions** section at the top:
+
+- Tap **💾 Export** to save a `saftey-descriptions-YYYY-MM-DD.json` file to their device. Store it somewhere safe (cloud drive, email to herself, etc.).
+- Tap **📂 Import** on a new device (or after a reinstall) and select that file to restore everything in one tap. Font and color theme are restored too.
+
+The export file is plain text and human-readable — a parent or clinician can also prepare a file with their descriptions pre-filled and share it via any file-sharing method, rather than having them type everything in on a small screen.
+
+### Step 6 — Pin the right crisis line
 
 Go to the **Crisis Lines** tab and pin the correct country. This ensures that levels 8, 9, and 10 show the right number for where you are. If you're in the US, 988 is already the default. If you're in Colombia, pin Colombia (106). If you're traveling, you can re-pin at any time.
 
@@ -171,7 +182,18 @@ La aplicación permite editar cada campo — descripciones, sensaciones corporal
 
 Para editar: toquen cualquier número de nivel, luego toquen el botón ✏️ editar junto a cualquier campo.
 
-### Paso 5 — Fijar la línea de crisis correcta
+### Paso 5 — Hacer una copia de seguridad y transferir sus descripciones
+
+Una vez que haya editado las descripciones de los niveles para que reflejen su propia experiencia, esos cambios solo existen en el almacenamiento local de su teléfono. Hacer una copia de seguridad protege contra perderlos si reinstala la aplicación, borra los datos del navegador o cambia de dispositivo.
+
+Vayan a la pestaña **Preferencias** → sección **Mis Descripciones** en la parte superior:
+
+- Toquen **💾 Exportar** para guardar un archivo `saftey-descriptions-AAAA-MM-DD.json` en el dispositivo. Guárdenlo en un lugar seguro (nube, correo electrónico, etc.).
+- Toquen **📂 Importar** en un dispositivo nuevo (o después de reinstalar) y seleccionen ese archivo para restaurar todo con un solo toque. La fuente y el tema de color también se restauran.
+
+El archivo de exportación es un archivo de texto legible — un padre o proveedor también puede preparar un archivo con las descripciones ya escritas y compartirlo por cualquier medio, en lugar de que el paciente tenga que escribir todo en una pantalla pequeña.
+
+### Paso 6 — Fijar la línea de crisis correcta
 
 Vayan a la pestaña **Líneas de Ayuda** y fijen el país correcto. Esto asegura que los niveles 8, 9 y 10 muestren el número correcto para donde están. Si están en Colombia, fijen Colombia (106). Si están viajando, pueden volver a fijar en cualquier momento.
 
